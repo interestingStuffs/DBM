@@ -72,3 +72,40 @@ async def test_get_event(client: AsyncClient):
     assert retrieved_event["location"] == event_data["location"]
     assert retrieved_event["start_time"] == event_data["start_time"]
     assert retrieved_event["end_time"] == event_data["end_time"]
+
+# Test retrieving all events
+@pytest.mark.anyio
+async def test_list_events(client: AsyncClient):
+    # First, create a couple of events to ensure there's something to list
+    event_data1 = {
+        "name": "Test Event 1",
+        "description": {"en": "First test event", "fr": "Premier événement test"},
+        "location": "Location 1",
+        "start_time": datetime(2024, 7, 21, 10, 0, 0).isoformat(),
+        "end_time": datetime(2024, 7, 21, 12, 0, 0).isoformat()
+    }
+    event_data2 = {
+        "name": "Test Event 2",
+        "description": {"en": "Second test event", "fr": "Deuxième événement test"},
+        "location": "Location 2",
+        "start_time": datetime(2024, 7, 22, 10, 0, 0).isoformat(),
+        "end_time": datetime(2024, 7, 22, 12, 0, 0).isoformat()
+    }
+    await client.post("/api/v1/events/", json=event_data1)
+    await client.post("/api/v1/events/", json=event_data2)
+    
+    # List all events
+    list_response = await client.get("/api/v1/events/")
+    assert list_response.status_code == 200
+    events = list_response.json()
+    
+    # Check if at least two events are returned
+    assert len(events) >= 2
+
+    # Validate the structure of the response
+    for event in events:
+        assert "name" in event
+        assert "description" in event
+        assert "location" in event
+        assert "start_time" in event
+        assert "end_time" in event
