@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     MONGODB_URL: str = os.getenv("MONGODB_URL", "mongodb://localhost:27017")
-    MONGODB_DB: str = os.getenv("MONGODB_DB", "mydatabase")
+    MONGODB_DB: str = os.getenv("MONGODB_DB", "DBM")
 
     # Add other settings here
     # For example, settings related to security, MinIO, etc.
