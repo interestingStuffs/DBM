@@ -12,6 +12,7 @@ async def get_event(event_id: str) -> EventInDB:
     collection = get_collection("events")
     event = await collection.find_one({"_id": ObjectId(event_id)})
     if event:
+        event['_id'] = str(event['_id'])  # Ensure `_id` is a string
         return EventInDB(**event)
     return None
 
