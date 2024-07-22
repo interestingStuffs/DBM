@@ -99,6 +99,9 @@ async def test_list_events(client: AsyncClient):
     assert list_response.status_code == 200
     events = list_response.json()
     
+    # Print the response content for debugging
+    print("List response:", events)
+    
     # Check if at least two events are returned
     assert len(events) >= 2
 
