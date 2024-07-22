@@ -2,10 +2,11 @@ from pydantic import BaseModel, Field
 from typing import Optional
 from bson import ObjectId
 from datetime import datetime
+from typing import Dict
 
 class EventBase(BaseModel):
     name: str
-    description: str
+    description: Dict[str, str]  # Dictionary with language codes as keys
     location: str
     start_time: datetime
     end_time: datetime

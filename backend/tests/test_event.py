@@ -18,7 +18,10 @@ async def client():
 async def test_create_event(client: AsyncClient):
     event_data = {
         "name": "Test Event",
-        "description": "A test event",
+        "description": {
+            "en": "A test event",
+            "fr": "Un événement test"
+        },
         "location": "Test Location",
         "start_time": datetime(2024, 7, 21, 10, 0, 0).isoformat(),
         "end_time": datetime(2024, 7, 21, 12, 0, 0).isoformat()
@@ -37,8 +40,11 @@ async def test_create_event(client: AsyncClient):
 async def test_get_event(client: AsyncClient):
     # First, create an event to ensure there's something to retrieve
     event_data = {
-        "name": "Test Event for Retrieval",
-        "description": "A test event for retrieval",
+        "name": "Test Event for retrieval",
+        "description": {
+            "en": "A test event",
+            "fr": "Un événement test pour retrieve"
+        },
         "location": "Test Location",
         "start_time": datetime(2024, 7, 21, 10, 0, 0).isoformat(),
         "end_time": datetime(2024, 7, 21, 12, 0, 0).isoformat()
