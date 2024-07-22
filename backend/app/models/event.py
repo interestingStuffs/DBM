@@ -6,7 +6,7 @@ from typing import Dict
 
 class EventBase(BaseModel):
     name: str
-    description: Dict[str, str]  # Dictionary with language codes as keys
+    description: Dict[str, str]
     location: str
     start_time: datetime
     end_time: datetime
@@ -22,8 +22,9 @@ class EventUpdate(BaseModel):
     end_time: Optional[datetime] = None
 
 class EventInDB(EventBase):
-    id: Optional[str] = Field(alias='_id')
+    id: Optional[ObjectId] = Field(default=None, alias='_id')
 
     class Config:
         populate_by_name = True
+        arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
