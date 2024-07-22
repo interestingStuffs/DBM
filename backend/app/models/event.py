@@ -16,13 +16,13 @@ class EventCreate(EventBase):
 
 class EventUpdate(BaseModel):
     name: Optional[str] = None
-    description: Optional[str] = None
+    description: Optional[Dict[str, str]] = None  # Changed to Dict[str, str]
     location: Optional[str] = None
     start_time: Optional[datetime] = None
     end_time: Optional[datetime] = None
 
 class EventInDB(EventBase):
-    id: Optional[ObjectId] = Field(default=None, alias='_id')
+    id: Optional[str] = Field(default=None, alias='_id')  # Changed to str
 
     class Config:
         populate_by_name = True
