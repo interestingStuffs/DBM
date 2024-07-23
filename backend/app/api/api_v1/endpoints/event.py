@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from app.models.event import EventCreate, EventUpdate, EventInDB
-from app.service.event_service import create_event_service, get_event_service, update_event_service, delete_event_service, get_events_service
+from app.service.event_service import create_event_service, get_event_service, update_event_service, delete_event_service, get_events_service, get_events_by_date_range_service
 from typing import List
 from datetime import datetime
 
