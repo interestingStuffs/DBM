@@ -1,6 +1,7 @@
 from typing import List
 from app.models.event import EventCreate, EventUpdate, EventInDB
-from app.crud.event import create_event, get_event, update_event, delete_event, get_events
+from app.crud.event import create_event, get_event, update_event, delete_event, get_events, get_events_by_date_range
+from datetime import datetime
 
 async def create_event_service(event: EventCreate) -> EventInDB:
     return await create_event(event)
@@ -16,3 +17,6 @@ async def delete_event_service(event_id: str) -> bool:
 
 async def get_events_service(skip: int = 0, limit: int = 10) -> List[EventInDB]:
     return await get_events(skip, limit)
+
+async def get_events_by_date_range_service(start_date: datetime, end_date: datetime, skip: int = 0, limit: int = 10) -> List[EventInDB]:
+    return await get_events_by_date_range(start_date, end_date, skip, limit)

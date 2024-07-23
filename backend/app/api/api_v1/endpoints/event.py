@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from app.models.event import EventCreate, EventUpdate, EventInDB
 from app.service.event_service import create_event_service, get_event_service, update_event_service, delete_event_service, get_events_service
 from typing import List
+from datetime import datetime
 
 router = APIRouter()
 
@@ -33,3 +34,7 @@ async def delete_event_route(event_id: str):
 @router.get("/", response_model=List[EventInDB])
 async def list_events(skip: int = 0, limit: int = 10):
     return await get_events_service(skip=skip, limit=limit)
+
+@router.get("/range", response_model=List[EventInDB])
+async def get_events_by_date_range(start_date: datetime, end_date: datetime, skip: int = 0, limit: int = 10):
+    return await get_events_by_date_range_service(start_date, end_date, skip, limit)

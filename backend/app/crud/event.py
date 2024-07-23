@@ -2,6 +2,7 @@ from typing import List
 from app.models.event import EventCreate, EventUpdate, EventInDB
 from app.db.session import get_collection
 from bson import ObjectId
+from datetime import datetime
 
 async def create_event(event: EventCreate) -> EventInDB:
     collection = get_collection("events")
@@ -31,3 +32,10 @@ async def get_events(skip: int = 0, limit: int = 10) -> List[EventInDB]:
     events_cursor = collection.find().skip(skip).limit(limit)
     events = await events_cursor.to_list(length=limit)
     return [EventInDB(**{**event, '_id': str(event['_id'])}) for event in events]  # Convert ObjectId to str
+
+async def get_events_by_date_range(start_date: datetime, end_date: datetime, skip: int = 0, limit: int = 10) -> List[EventInDB]:
+    collection = get_collection("events")
+    query = {"start_time": {"$gte": start_date}, "end_time": {"$lte": end_date}}
+    events_cursor = collection.find(query).skip(skip).limit(limit)
+    events = await events_cursor.to_list(length=limit)
+    return [EventInDB(**{**event, '_id': str(event['_id'])}) for event in events]
