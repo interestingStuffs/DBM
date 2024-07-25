@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from app.models.event import EventCreate, EventUpdate, EventInDB
+from app.models.event import EventCreate, EventUpdate, EventInDB, EventSummary
 from app.service.event_service import create_event_service, get_event_service, update_event_service, delete_event_service, get_events_service, get_events_by_date_range_service
 from typing import List
 from datetime import datetime
@@ -10,7 +10,7 @@ router = APIRouter()
 async def create_event_route(event: EventCreate):
     return await create_event_service(event)
 
-@router.get("/range", response_model=List[EventInDB])
+@router.get("/range", response_model=List[EventSummary])
 async def get_events_by_date_range(start_date: datetime, end_date: datetime, skip: int = 0, limit: int = 10):
     return await get_events_by_date_range_service(start_date, end_date, skip, limit)
 

@@ -28,3 +28,13 @@ class EventInDB(EventBase):
         populate_by_name = True
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
+
+class EventSummary(BaseModel):
+    id: str
+    title: str
+    date: datetime
+
+    class Config:
+        from_attributes = True
+        json_encoders = {ObjectId: str}
+

@@ -146,8 +146,8 @@ async def test_get_events_by_date_range(client: AsyncClient):
     # Print the response content for debugging
     print("Range response:", events_in_range)
     
-    # Assert that the event within range is returned
-    assert any(event["name"] == "Event Within Range" for event in events_in_range)
+    # Assert that the event within range is returned with expected fields
+    assert any(event["id"] and event["title"] == "Event Within Range" and event["date"] == "2024-07-20T10:00:00" for event in events_in_range)
     
     # Assert that the event outside range is not returned
-    assert not any(event["name"] == "Event Outside Range" for event in events_in_range)
+    assert not any(event["id"] and event["title"] == "Event Outside Range" for event in events_in_range)
