@@ -3,22 +3,33 @@ import { fetchEvents } from '../api';
 
 const EventList = () => {
   const [events, setEvents] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const loadEvents = async () => {
-      const data = await fetchEvents();
-      setEvents(data);
+      try {
+        const data = await fetchEvents();
+        console.log('Fetched events:', data); // Log the data for debugging
+        setEvents(data);
+      } catch (err) {
+        console.error('Error fetching events:', err);
+        setError('Failed to load events');
+      }
     };
     loadEvents();
   }, []);
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div>
       <h1>Event List</h1>
       <ul>
-        {events.map(event => (
-          <li key={event.id}>{event.title}</li>
-        ))}
+        {events.map((event, index) => (
+          <li key={index}>{event.name}</li> /* Use event.name instead of event.title */
+        ))},
       </ul>
     </div>
   );
