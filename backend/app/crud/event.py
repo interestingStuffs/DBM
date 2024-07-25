@@ -6,8 +6,8 @@ from datetime import datetime
 
 async def create_event(event: EventCreate) -> EventInDB:
     collection = get_collection("events")
-    result = await collection.insert_one(event.dict(by_alias=True))
-    return EventInDB(id=str(result.inserted_id), **event.dict())  # Convert ObjectId to str
+    result = await collection.insert_one(event.model_dump(by_alias=True))
+    return EventInDB(id=str(result.inserted_id), **event.model_dump())  # Convert ObjectId to str
 
 async def get_event(event_id: str) -> EventInDB:
     collection = get_collection("events")
@@ -18,7 +18,7 @@ async def get_event(event_id: str) -> EventInDB:
 
 async def update_event(event_id: str, event: EventUpdate) -> EventInDB:
     collection = get_collection("events")
-    await collection.update_one({"_id": ObjectId(event_id)}, {"$set": event.dict(exclude_unset=True, by_alias=True)})
+    await collection.update_one({"_id": ObjectId(event_id)}, {"$set": event.model_dump(exclude_unset=True, by_alias=True)})
     updated_event = await collection.find_one({"_id": ObjectId(event_id)})
     return EventInDB(**{**updated_event, '_id': str(updated_event['_id'])})  # Convert ObjectId to str
 
