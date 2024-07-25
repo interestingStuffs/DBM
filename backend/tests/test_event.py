@@ -112,3 +112,42 @@ async def test_list_events(client: AsyncClient):
         assert "location" in event
         assert "start_time" in event
         assert "end_time" in event
+
+# Test retrieving events by date range
+@pytest.mark.anyio
+async def test_get_events_by_date_range(client: AsyncClient):
+    # Create events within and outside the date range
+    event_data1 = {
+        "name": "Event Within Range",
+        "description": {"en": "An event within the range", "fr": "Un événement dans la plage"},
+        "location": "Location A",
+        "start_time": datetime(2024, 7, 20, 10, 0, 0).isoformat(),
+        "end_time": datetime(2024, 7, 20, 12, 0, 0).isoformat()
+    }
+    event_data2 = {
+        "name": "Event Outside Range",
+        "description": {"en": "An event outside the range", "fr": "Un événement en dehors de la plage"},
+        "location": "Location B",
+        "start_time": datetime(2024, 7, 25, 10, 0, 0).isoformat(),
+        "end_time": datetime(2024, 7, 25, 12, 0, 0).isoformat()
+    }
+    await client.post("/api/v1/events/", json=event_data1)
+    await client.post("/api/v1/events/", json=event_data2)
+    
+    # Define the date range for the test
+    start_date = datetime(2024, 7, 19).isoformat()
+    end_date = datetime(2024, 7, 21).isoformat()
+    
+    # Retrieve events by date range
+    range_response = await client.get(f"/api/v1/events/range?start_date={start_date}&end_date={end_date}")
+    assert range_response.status_code == 200
+    events_in_range = range_response.json()
+    
+    # Print the response content for debugging
+    print("Range response:", events_in_range)
+    
+    # Assert that the event within range is returned
+    assert any(event["name"] == "Event Within Range" for event in events_in_range)
+    
+    # Assert that the event outside range is not returned
+    assert not any(event["name"] == "Event Outside Range" for event in events_in_range)
