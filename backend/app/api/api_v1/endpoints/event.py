@@ -10,6 +10,10 @@ router = APIRouter()
 async def create_event_route(event: EventCreate):
     return await create_event_service(event)
 
+@router.get("/range", response_model=List[EventInDB])
+async def get_events_by_date_range(start_date: datetime, end_date: datetime, skip: int = 0, limit: int = 10):
+    return await get_events_by_date_range_service(start_date, end_date, skip, limit)
+
 @router.get("/{event_id}", response_model=EventInDB)
 async def get_event_route(event_id: str):
     event = await get_event_service(event_id)
@@ -34,7 +38,3 @@ async def delete_event_route(event_id: str):
 @router.get("/", response_model=List[EventInDB])
 async def list_events(skip: int = 0, limit: int = 10):
     return await get_events_service(skip=skip, limit=limit)
-
-@router.get("/range", response_model=List[EventInDB])
-async def get_events_by_date_range(start_date: datetime, end_date: datetime, skip: int = 0, limit: int = 10):
-    return await get_events_by_date_range_service(start_date, end_date, skip, limit)
